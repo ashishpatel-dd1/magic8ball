@@ -11,6 +11,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark, // Dark theme for a mystic feel
+        primaryColor: Colors.deepPurple,
+        scaffoldBackgroundColor: Colors.black87,
+        appBarTheme: AppBarTheme(
+          elevation: 8.0,
+          backgroundColor: Colors.deepPurple.shade900,
+          titleTextStyle: const TextStyle(
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+            color: Colors.white,
+          ),
+          centerTitle: true,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.all(Colors.deepPurpleAccent),
+            shadowColor: WidgetStateProperty.all(Colors.deepPurpleAccent),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            )),
+          ),
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
       title: 'Magic 8 Ball',
       home: const BallPage(title: 'Ask Me Anything'),
     );
@@ -27,7 +61,6 @@ class BallPage extends StatefulWidget {
 }
 
 class _BallPageState extends State<BallPage> {
-  int n = 5;
   int ballNumber = 1;
 
   void toggleAnswer() {
@@ -40,20 +73,40 @@ class _BallPageState extends State<BallPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        shadowColor: Colors.deepPurple,
-        elevation: 4.0,
         title: Text(widget.title),
       ),
       body: Center(
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: [Colors.purpleAccent, Colors.deepPurple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds);
+              },
+              child: const Text(
+                'Think of a Question...',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24.0),
             Expanded(
-                child: TextButton(
-                    //style: ,
-                    onPressed: toggleAnswer,
-                    child: Image.asset('images/ball$ballNumber.png')))
+              child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: WidgetStateProperty.all(Colors.deepPurpleAccent.withOpacity(0.2)),
+                  shadowColor: WidgetStateProperty.all(Colors.deepPurple),
+                ),
+                onPressed: toggleAnswer,
+                child: Image.asset('images/ball$ballNumber.png'),
+              ),
+            ),
           ],
         ),
       ),
